@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> De Pelos🤙 — Reservas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --negro: #1a1a1a;
+      --crema: #f8f6f2;
+      --dorado: #c9a84c;
+      --gris: #6b6b6b;
+      --borde: #e0ddd7;
+      --rojo: #c0392b;
+      --verde: #27ae60;
+    }
+    body { background: var(--crema); font-family: 'Inter', sans-serif; font-weight: 300; color: var(--negro); }
+
+    header {
+      background: var(--negro);
+      border-bottom: 2px solid var(--dorado);
+      padding: 18px 0 0;
+      text-align: center;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--crema);
+      font-size: 1.7rem;
+      margin-bottom: 16px;
+    }
+    header span { color: var(--dorado); }
+
+    .nav-tabs {
+      border-bottom: none;
+      justify-content: center;
+      gap: 4px;
+    }
+    .nav-tabs .nav-link {
+      border: none;
+      border-radius: 0;
+      color: #888;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 28px;
+      border-bottom: 2px solid transparent;
+      transition: all .15s;
+    }
+    .nav-tabs .nav-link:hover { color: var(--crema); }
+    .nav-tabs .nav-link.active {
+      background: transparent;
+      color: var(--dorado);
+      border-bottom: 2px solid var(--dorado);
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--borde);
+      border-radius: 2px;
+      padding: 32px;
+      max-width: 540px;
+      margin: 40px auto;
+    }
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+    .gold-line { width: 40px; height: 2px; background: var(--dorado); margin: 10px 0 24px; }
+
+    label {
+      font-size: 0.73rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .form-control, .form-select {
+      border: 1px solid var(--borde);
+      border-radius: 2px;
+      background: var(--crema);
+      font-size: 0.88rem;
+      color: var(--negro);
+      padding: 10px 14px;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .form-control:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--dorado);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.1);
+    }
+
+    .turnos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .turno {
+      border: 1px solid var(--borde);
+      background: var(--crema);
+      border-radius: 2px;
+      padding: 9px 4px;
+      font-size: 0.82rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      position: relative;
+    }
+    .turno:hover:not(.ocupado) { border-color: var(--dorado); }
+    .turno.activo { background: var(--negro); color: var(--crema); border-color: var(--negro); }
+    .turno.ocupado {
+      background: transparent;
+      border-color: #c0392b;
+      color: #c0392b;
+      font-size: 0.72rem;
+      cursor: default;
+      text-decoration: line-through;
+    }
+    .turno.sel-admin { outline: 2px solid var(--dorado); outline-offset: 1px; }
+
+    .btn-main {
+      display: block; width: 100%;
+      background: var(--negro); color: var(--crema);
+      border: none; border-radius: 2px;
+      padding: 13px; font-size: 0.78rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; margin-top: 4px; transition: background .2s;
+    }
+    .btn-main:hover { background: var(--dorado); color: var(--negro); }
+
+    .btn-danger-custom {
+      display: block; width: 100%;
+      background: transparent; color: var(--rojo);
+      border: 1px solid var(--rojo); border-radius: 2px;
+      padding: 11px; font-size: 0.78rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; margin-top: 8px; transition: all .2s;
+    }
+    .btn-danger-custom:hover { background: var(--rojo); color: #fff; }
+
+    .btn-success-custom {
+      display: block; width: 100%;
+      background: transparent; color: var(--verde);
+      border: 1px solid var(--verde); border-radius: 2px;
+      padding: 11px; font-size: 0.78rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; margin-top: 8px; transition: all .2s;
+    }
+    .btn-success-custom:hover { background: var(--verde); color: #fff; }
+
+    .aviso {
+      display: none;
+      border-left: 3px solid var(--dorado);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      margin-top: 14px;
+      background: #fffdf5;
+    }
+    .aviso.rojo { border-color: var(--rojo); background: #fdf0ef; }
+    .aviso.verde { border-color: var(--verde); background: #edfbf3; }
+
+    .turno-info {
+      display: none;
+      background: var(--crema);
+      border: 1px solid var(--borde);
+      border-radius: 2px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+    .turno-info .hora { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .turno-info .badge-ocupado {
+      background: #fdf0ef; color: var(--rojo);
+      border: 1px solid #e8c5c2;
+      font-size: 0.7rem; padding: 2px 8px; border-radius: 20px;
+    }
+    .turno-info .badge-libre {
+      background: #edfbf3; color: var(--verde);
+      border: 1px solid #b2e8c8;
+      font-size: 0.7rem; padding: 2px 8px; border-radius: 20px;
+    }
+
+    hr.sep { border-color: var(--borde); margin: 8px 0 22px; }
+
+    footer {
+      text-align: center; font-size: 0.78rem;
+      color: var(--gris); padding: 20px 0 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>De Pelos<span>🤙</span></h1>
+    <ul class="nav nav-tabs" id="mainTabs">
+      <li class="nav-item">
+        <button class="nav-link active" onclick="showTab('cliente')">Cliente</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" onclick="showTab('admin')">Administrador</button>
+      </li>
+    </ul>
+  </header>
+
+  <!-- VISTA CLIENTE -->
+  <div id="vista-cliente">
+    <div class="card">
+      <h2>Reservá tu turno</h2>
+      <div class="gold-line"></div>
+
+      <label>Servicio</label>
+      <select class="form-select">
+        <option value="">— Elegí un servicio —</option>
+        <option>Corte clásico — 45.000 Gs. · 30 min</option>
+        <option>Corte + barba — 70.000 Gs. · 50 min</option>
+        <option>Color + corte — 82.000 Gs. · 90 min</option>
+        <option>Afeitado — 35.000 Gs. · 25 min</option>
+        <option>Tratamiento — 75.000 Gs. · 60 min</option>
+      </select>
+
+      <label>Profesional</label>
+      <select class="form-select">
+        <option value="">— Sin preferencia —</option>
+        <option>Jeremías B. — Fade & degradé</option>
+        <option>Maite C. — Color & mechas</option>
+        <option>Sergio F. — Barbería clásica</option>
+      </select>
+
+      <label>Fecha</label>
+      <input type="date" class="form-control" id="fecha-cliente" />
+
+      <label>Turno disponible</label>
+      <div class="turnos" id="turnos-cliente"></div>
+
+      <hr class="sep" />
+      <p style="font-size:0.73rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin-bottom:18px;">Tus datos</p>
+
+      <label>Nombre y apellido</label>
+      <input type="text" class="form-control" placeholder="Tu nombre completo" />
+
+      <label>Teléfono / WhatsApp</label>
+      <input type="tel" class="form-control" placeholder="+595 974 565065" />
+
+      <label>Email</label>
+      <input type="email" class="form-control" placeholder="correo@ejemplo.com" />
+
+      <button class="btn-main" onclick="confirmarCliente()">Confirmar reserva</button>
+
+      <div class="aviso verde" id="aviso-cliente">
+        ✓ &nbsp;<strong>¡Turno reservado!</strong> Te confirmamos por WhatsApp.
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ VISTA ADMIN ════════ -->
+  <div id="vista-admin" style="display:none;">
+
+    <!-- LOGIN -->
+    <div class="card" id="card-login">
+      <h2>Administrador</h2>
+      <div class="gold-line"></div>
+      <label>Usuario</label>
+      <input type="text" class="form-control" id="login-user" placeholder="Usuario" />
+      <label>Contraseña</label>
+      <input type="password" class="form-control" id="login-pass" placeholder="Contraseña"
+             onkeydown="if(event.key==='Enter') loginAdmin()" />
+      <button class="btn-main" onclick="loginAdmin()">Ingresar</button>
+      <div class="aviso rojo" id="aviso-login" style="margin-top:12px;display:none;">
+        ✗ &nbsp;Usuario o contraseña incorrectos.
+      </div>
+    </div>
+
+    <!-- PANEL (oculto hasta login) -->
+    <div id="card-panel" style="display:none;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <h2 style="margin:0;">Panel de turnos</h2>
+        <button onclick="cerrarSesion()" style="background:none;border:none;font-size:0.75rem;color:var(--gris);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;">Cerrar sesión</button>
+      </div>
+      <div class="gold-line"></div>
+
+      <label>Fecha</label>
+      <input type="date" class="form-control" id="fecha-admin" />
+
+      <label>Seleccioná un turno</label>
+      <div class="turnos" id="turnos-admin"></div>
+
+      <div class="turno-info" id="info-turno">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span class="hora" id="info-hora">—</span>
+          <span id="info-badge"></span>
+        </div>
+        <div id="info-detalle" style="color:var(--gris);font-size:0.82rem;"></div>
+      </div>
+
+      <button class="btn-success-custom" id="btn-asignar" onclick="asignarTurno()" style="display:none;">
+        ＋ Asignar turno
+      </button>
+      <button class="btn-danger-custom" id="btn-desasignar" onclick="desasignarTurno()" style="display:none;">
+        × Desasignar turno
+      </button>
+
+      <div id="form-asignar" style="display:none; margin-top:18px;">
+        <hr class="sep" />
+        <p style="font-size:0.73rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin-bottom:16px;">Datos del cliente</p>
+        <label>Nombre y apellido</label>
+        <input type="text" class="form-control" id="admin-nombre" placeholder="Nombre del cliente" />
+        <label>Teléfono</label>
+        <input type="tel" class="form-control" id="admin-tel" placeholder="+595 974 565065" />
+        <label>Servicio</label>
+        <select class="form-select" id="admin-servicio">
+          <option value="">— Elegí un servicio —</option>
+          <option>Corte clásico</option>
+          <option>Corte + barba</option>
+          <option>Color + corte</option>
+          <option>Afeitado</option>
+          <option>Tratamiento</option>
+        </select>
+        <button class="btn-main" onclick="confirmarAsignacion()">Guardar asignación</button>
+      </div>
+
+      <div class="aviso verde" id="aviso-admin-ok" style="margin-top:14px;"></div>
+      <div class="aviso rojo"  id="aviso-admin-err" style="margin-top:14px;"></div>
+    </div>
+    </div>
+  </div>
+
+  <footer>
+    <p style="margin-bottom:6px;">Av. La Burrerita - Lambaré &nbsp;·&nbsp; Lun–Sáb 9:00–19:00</p>
+    <div style="width:32px;height:1px;background:var(--dorado);margin:10px auto;"></div>
+    <p style="margin-bottom:3px;font-size:0.8rem;color:var(--negro);letter-spacing:.05em;">Contáctanos</p>
+    <p style="margin-bottom:2px;"><a href="tel:+595974565065" style="color:var(--gris);text-decoration:none;">📞 +595 974 565065</a></p>
+    <p style="margin-bottom:0;"><a href="mailto:fleitasleo555@gmail.com" style="color:var(--gris);text-decoration:none;">✉ fleitasleo555@gmail.com</a></p>
+  </footer>
+
+  <script>
+    function loginAdmin() {
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      if (user === 'admin' && pass === '12345') {
+        document.getElementById('card-login').style.display = 'none';
+        document.getElementById('card-panel').style.display = '';
+      } else {
+        document.getElementById('aviso-login').style.display = 'block';
+      }
+    }
+    function cerrarSesion() {
+      document.getElementById('card-login').style.display = '';
+      document.getElementById('card-panel').style.display = 'none';
+      document.getElementById('login-user').value = '';
+      document.getElementById('login-pass').value = '';
+      document.getElementById('aviso-login').style.display = 'none';
+    }
+
+    const HORAS = ['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00','17:00'];
+
+    const estado = {};
+    HORAS.forEach(h => estado[h] = null);
+    estado['10:00'] = { nombre: 'Carlos Díaz', tel: '11 4321-5678', servicio: 'Corte clásico' };
+    estado['11:00'] = { nombre: 'Valeria M.',  tel: '11 9876-0000', servicio: 'Color + corte' };
+    estado['15:00'] = { nombre: 'Pedro R.',    tel: '11 1111-2222', servicio: 'Afeitado' };
+
+    let turnoSelAdmin = null;
+
+    function showTab(tab) {
+      document.getElementById('vista-cliente').style.display = tab === 'cliente' ? '' : 'none';
+      document.getElementById('vista-admin').style.display   = tab === 'admin'   ? '' : 'none';
+      document.querySelectorAll('#mainTabs .nav-link').forEach((b, i) => {
+        b.classList.toggle('active', (i === 0 && tab === 'cliente') || (i === 1 && tab === 'admin'));
+      });
+    }
+
+    function renderCliente() {
+      const cont = document.getElementById('turnos-cliente');
+      cont.innerHTML = '';
+      HORAS.forEach(h => {
+        const d = document.createElement('div');
+        d.className = 'turno' + (estado[h] ? ' ocupado' : '');
+        d.textContent = h;
+        if (!estado[h]) d.onclick = () => pickCliente(d);
+        cont.appendChild(d);
+      });
+    }
+
+    function pickCliente(el) {
+      document.querySelectorAll('#turnos-cliente .turno').forEach(t => t.classList.remove('activo'));
+      el.classList.add('activo');
+    }
+
+    function renderAdmin() {
+      const cont = document.getElementById('turnos-admin');
+      cont.innerHTML = '';
+      turnoSelAdmin = null;
+      ocultarInfo();
+      HORAS.forEach(h => {
+        const d = document.createElement('div');
+        d.className = 'turno' + (estado[h] ? ' ocupado' : '');
+        d.textContent = h;
+        d.onclick = () => pickAdmin(d, h);
+        cont.appendChild(d);
+      });
+    }
+
+    function pickAdmin(el, hora) {
+      document.querySelectorAll('#turnos-admin .turno').forEach(t => t.classList.remove('sel-admin'));
+      el.classList.add('sel-admin');
+      turnoSelAdmin = hora;
+      mostrarInfo(hora);
+    }
+
+    function mostrarInfo(hora) {
+      const info = document.getElementById('info-turno');
+      const dat  = estado[hora];
+      info.style.display = 'block';
+      document.getElementById('info-hora').textContent = hora;
+
+      if (dat) {
+        document.getElementById('info-badge').innerHTML = '<span class="badge-ocupado">Ocupado</span>';
+        document.getElementById('info-detalle').innerHTML =
+          `<strong>${dat.nombre}</strong> · ${dat.tel}<br>${dat.servicio}`;
+        document.getElementById('btn-asignar').style.display   = 'none';
+        document.getElementById('btn-desasignar').style.display = 'block';
+        document.getElementById('form-asignar').style.display  = 'none';
+      } else {
+        document.getElementById('info-badge').innerHTML = '<span class="badge-libre">Libre</span>';
+        document.getElementById('info-detalle').textContent = 'Este turno está disponible.';
+        document.getElementById('btn-asignar').style.display    = 'block';
+        document.getElementById('btn-desasignar').style.display = 'none';
+      }
+      ocultarAvisos();
+    }
+
+    function ocultarInfo() {
+      document.getElementById('info-turno').style.display       = 'none';
+      document.getElementById('btn-asignar').style.display      = 'none';
+      document.getElementById('btn-desasignar').style.display   = 'none';
+      document.getElementById('form-asignar').style.display     = 'none';
+      ocultarAvisos();
+    }
+
+    function ocultarAvisos() {
+      document.getElementById('aviso-admin-ok').style.display  = 'none';
+      document.getElementById('aviso-admin-err').style.display = 'none';
+    }
+
+    function asignarTurno() {
+      document.getElementById('form-asignar').style.display = 'block';
+      document.getElementById('admin-nombre').value = '';
+      document.getElementById('admin-tel').value    = '';
+      document.getElementById('admin-servicio').value = '';
+    }
+
+    function confirmarAsignacion() {
+      const nombre   = document.getElementById('admin-nombre').value.trim();
+      const tel      = document.getElementById('admin-tel').value.trim();
+      const servicio = document.getElementById('admin-servicio').value;
+      if (!nombre || !servicio) {
+        mostrarAviso('err', '⚠ Completá el nombre y el servicio.');
+        return;
+      }
+      estado[turnoSelAdmin] = { nombre, tel, servicio };
+      renderAdmin();
+      renderCliente();
+      mostrarAviso('ok', `✓ Turno <strong>${turnoSelAdmin}</strong> asignado a <strong>${nombre}</strong>.`);
+    }
+
+    function desasignarTurno() {
+      const dat = estado[turnoSelAdmin];
+      const nombre = dat ? dat.nombre : turnoSelAdmin;
+      estado[turnoSelAdmin] = null;
+      renderAdmin();
+      renderCliente();
+      mostrarAviso('ok', `✓ Turno <strong>${turnoSelAdmin}</strong> liberado (era: ${nombre}).`);
+    }
+
+    function mostrarAviso(tipo, msg) {
+      ocultarAvisos();
+      const el = document.getElementById(tipo === 'ok' ? 'aviso-admin-ok' : 'aviso-admin-err');
+      el.innerHTML = msg;
+      el.style.display = 'block';
+    }
+
+    function confirmarCliente() {
+      const fechaInput = document.getElementById('fecha-cliente').value;
+      const turnoActivo = document.querySelector('#turnos-cliente .turno.activo');
+
+      if (!fechaInput || !turnoActivo) {
+        document.getElementById('aviso-cliente').style.display = 'block';
+        document.getElementById('aviso-cliente').style.color = 'var(--rojo)';
+        document.getElementById('aviso-cliente').innerHTML = '⚠ Seleccioná una fecha y un turno.';
+        return;
+      }
+
+      const fecha = new Date(fechaInput + 'T12:00:00');
+      const dia = fecha.getDate();
+      const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      const mes = meses[fecha.getMonth()];
+      const hora = turnoActivo.textContent;
+
+      document.getElementById('aviso-cliente').style.color = '';
+      document.getElementById('aviso-cliente').style.display = 'block';
+      document.getElementById('aviso-cliente').innerHTML = '✓ &nbsp;<strong>¡Turno reservado!</strong> Para el día ' + dia + ' de ' + mes + ' a las ' + hora + ' hs. Te confirmamos por WhatsApp.';
+
+      estado[hora] = { nombre: 'Cliente', tel: '', servicio: '' };
+      renderCliente();
+      renderAdmin();
+    }
+
+    renderCliente();
+    renderAdmin();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
